@@ -1,17 +1,17 @@
-// 100-main.js
-import createIteratorObject from "./100-createIteratorObject.js";
-import createEmployeesObject from './11-createEmployeesObject.js';
-import createReportObject from './12-createReportObject.js';
+export default function createIteratorObject(report) {
+  // Define a generator function to yield each employee
+  function* iterateEmployees() {
+    // Iterate through each department in the report
+    for (const department in report.allEmployees) {
+      // Iterate through each employee in the current department
+      for (const employee of report.allEmployees[department]) {
+        yield employee;
+      }
+    }
+  }
 
-const employees = {
-  ...createEmployeesObject('engineering', ['Bob', 'Jane']),
-  ...createEmployeesObject('marketing', ['Sylvie'])
-};
-
-const report = createReportObject(employees);
-
-const reportWithIterator = createIteratorObject(report);
-
-for (const item of reportWithIterator) {
-  console.log(item);
+  // Return an object with Symbol.iterator property pointing to the generator function
+  return {
+    [Symbol.iterator]: iterateEmployees
+  };
 }
